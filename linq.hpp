@@ -4,6 +4,7 @@
 
 namespace linq
 {
+	//comment just added
 	namespace 
 	{
 		template<typename Functor>
