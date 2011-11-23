@@ -14,9 +14,9 @@ namespace linq
 			std::function<bool(const TSource &)> predicate;
 			where_impl(std::function<bool(const TSource &)> predicate) : predicate(predicate) {}
 			template<typename TContainer>
-			typename utility::rebind<TContainer,TSource>::type operator()(const TContainer & source) const
+			TContainer operator()(const TContainer & source) const
 			{ 
-				typename utility::rebind<TContainer,TSource>::type result;
+				TContainer result;
 	     			for(typename TContainer::const_iterator i = source.begin() ; i != source.end(); i++)
 	     			{
 		     			if ( predicate(*i) )
