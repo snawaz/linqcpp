@@ -38,33 +38,38 @@ int main()
         using namespace linq;
 
 	//create a vector of persons and print them
-	std::vector<person> persons = { {1, "Aleeza"}, {3, "Nayab"}, {7, "Tufail"}, {8, "Sana"}, {11, "Farah"},
-		{13, "Ashraf"}, {13, "Neha"}, {15, "Zeeshan" }, {16, "Adil"}, {17, "Nadim"}, {19, "Nafis"}, 
-		{20, "Ahsan"}, {21, "Zartab"}, {23, "Nilufer"}, {24, "Talat"}
+	std::vector<person> persons = { 
+		 {1, "Aleeza"}, {3, "Nayab"}, {13, "Ashraf"}, {16, "Adil"}, 
+		 {20, "Ahsan"}, {21, "Zartab"}, {17, "Nadim"}, {19, "Nafis"}, 
+		 {13, "Neha"}, {15, "Zeeshan" }, {11, "Farah"}, {13, "Fauzia"},
+		 {23, "Nilufer"}, {24, "Talat"}, {7, "Tufail"}, {8, "Sana"} 
 	};
-	std::cout << persons << std::endl;
+	std::cout << "\tOriginal\n" << persons << std::endl;
 
 	//orderby age and print the result 
-	auto v3 = persons | orderby([](const person & p) { return p.age; });
-	std::cout << v3 << std::endl;
+	auto v1 = persons | orderby([](const person & p) { return p.age; });
+	std::cout << "\tOrder by Age\n" << v1 << std::endl;
 
 	//filter all teenagers then orderby name, and print the result
-	auto v4 = persons 
+	auto v2 = persons 
+		| where([](const person & p) { return p.age >=13 && p.age <= 19 ; }) 
+		| orderby([](const person & p) { return p.age; });
+	std::cout << "\tFilter Teenagers, and Order by Age\n" << v2 << std::endl;
+
+	//filter all teenagers then orderby name, and print the result
+	auto v3 = persons 
 		| where([](const person & p) { return p.age >=13 && p.age <= 19 ; }) 
 		| orderby([](const person & p) { return p.name; });
-
-	std::cout << v4 << std::endl;
-
-	//orderby age and print the result without saving it
-	std::cout << (v4 |  orderby([](const person & p) { return p.age; })) << std::endl ;
+	std::cout << "\tFilter Teenagers, and Order by Name\n" << v3 << std::endl;
 
 	//groupby kids, teenagers, adults and print the result - the type of the result of std::map!
 	auto groups = persons | groupby([](const person & p) 
 	{  
-		if ( p.age < 13 ) return std::string("kids");
-		else if ( p.age < 20 ) return std::string("teenagers");
-		else return std::string("adults");
+		if ( p.age < 13 ) return "Kids";
+		else if ( p.age < 20 ) return "Teenagers";
+		else return "Adults";
 	});
+	std::cout << "\tGroupby Maturity" << std::endl;
 	for(auto i = groups.begin(); i != groups.end(); i++ )
 	{
 		std::cout << i->first << std::endl;
