@@ -48,7 +48,7 @@ int main()
 	auto v3 = persons | orderby([](const person & p) { return p.age; });
 	std::cout << v3 << std::endl;
 
-	//filter using age-range, then orderby name, and print the result
+	//filter all teenagers then orderby name, and print the result
 	auto v4 = persons 
 		| where([](const person & p) { return p.age >=13 && p.age <= 19 ; }) 
 		| orderby([](const person & p) { return p.name; });
@@ -58,7 +58,7 @@ int main()
 	//orderby age and print the result without saving it
 	std::cout << (v4 |  orderby([](const person & p) { return p.age; })) << std::endl ;
 
-	//groupby age%6, and print the result - the type of the result of std::map!
+	//groupby kids, teenagers, adults and print the result - the type of the result of std::map!
 	auto groups = persons | groupby([](const person & p) 
 	{  
 		if ( p.age < 13 ) return std::string("kids");
