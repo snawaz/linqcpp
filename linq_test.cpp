@@ -62,7 +62,7 @@ int main()
 		| orderby([](const person & p) { return p.name; });
 	std::cout << "\tFilter Teenagers, and Order by Name\n" << v3 << std::endl;
 
-	//groupby kids, teenagers, adults and print the result - the type of the result of std::map!
+	//groupby kids, teenagers, adults and print the result
 	auto groups = persons | groupby([](const person & p) 
 	{  
 		if ( p.age < 13 ) return "Kids";
@@ -70,6 +70,7 @@ int main()
 		else return "Adults";
 	});
 	std::cout << "\tGroupby Maturity" << std::endl;
+	//Note that the type of groups is std::map!
 	for(auto i = groups.begin(); i != groups.end(); i++ )
 	{
 		std::cout << i->first << std::endl;
