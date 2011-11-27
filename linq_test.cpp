@@ -6,8 +6,6 @@
 #include <algorithm>
 #include <iterator>
 #include <typeinfo>
-#include <ctime>
-#include <cstdlib>
 #include "linq.hpp"
 
 //print functions
@@ -28,12 +26,6 @@ struct person
 {
 	int age;
 	std::string name;
-	person() : age(std::rand()%100 + 10) 
-	{
-		std::stringstream ss;
-		ss << std::hex << std::rand() * 98789;
-		name = ss.str();
-	}
 	friend std::ostream& operator << (std::ostream & out, const person & p)
 	{
 		return out << "("<<p.age<<","<<p.name<<")" << std::endl;
@@ -45,13 +37,11 @@ int main()
 
         using namespace linq;
 
-	std::srand(std::time(0));
-
 	//create a vector of persons and print them
-	std::vector<person> persons;
-	persons.reserve(15);
-	for(int i = 0 ; i < 15; i++ ) 
-		persons.push_back(person());
+	std::vector<person> persons = { {1, "Aleeza"}, {3, "Nayab"}, {7, "Tufail"}, {8, "Sana"}, {11, "Farah"},
+		{13, "Ashraf"}, {13, "Neha"}, {15, "Zeeshan" }, {16, "Adil"}, {17, "Nadim"}, {19, "Nafis"}, 
+		{20, "Ahsan"}, {21, "Zartab"}, {23, "Nilufer"}, {24, "Talat"}
+	};
 	std::cout << persons << std::endl;
 
 	//orderby age and print the result 
@@ -60,7 +50,7 @@ int main()
 
 	//filter using age-range, then orderby name, and print the result
 	auto v4 = persons 
-		| where([](const person & p) { return p.age > 25 && p.age < 50; }) 
+		| where([](const person & p) { return p.age >=13 && p.age <= 19 ; }) 
 		| orderby([](const person & p) { return p.name; });
 
 	std::cout << v4 << std::endl;
@@ -69,7 +59,12 @@ int main()
 	std::cout << (v4 |  orderby([](const person & p) { return p.age; })) << std::endl ;
 
 	//groupby age%6, and print the result - the type of the result of std::map!
-	auto groups = persons | groupby([](const person & p) { std::stringstream ss; ss << "key"<< p.age % 6; return ss.str(); });
+	auto groups = persons | groupby([](const person & p) 
+	{  
+		if ( p.age < 13 ) return std::string("kids");
+		else if ( p.age < 20 ) return std::string("teenagers");
+		else return std::string("adults");
+	});
 	for(auto i = groups.begin(); i != groups.end(); i++ )
 	{
 		std::cout << i->first << std::endl;
